@@ -59,3 +59,12 @@ func BitFlipper(s string) string {
 	}
 	return ret
 }
+
+func ArrStoI(s []string) []int {
+	var ints []int
+	for i := range s {
+		j, _ := strconv.Atoi(s[i])
+		ints = append(ints, j)
+	}
+	return ints
+}

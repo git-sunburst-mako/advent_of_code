@@ -37,12 +37,13 @@ func (i *InputReader) readLines() {
 }
 
 func (ir *InputReader) ConvertToInts() {
-	var ints []int
-	for i := range ir.StrData {
-		j, _ := strconv.Atoi(ir.StrData[i])
-		ints = append(ints, j)
-	}
-	ir.IntData = ints
+	ir.IntData = ArrStoI(ir.StrData)
+}
+
+func (ir *InputReader) SplitStringToInts(delim string) {
+	nums := strings.Split(ir.StrData[0], delim)
+	ir.StrData = nums
+	ir.ConvertToInts()
 }
 
 func (ir *InputReader) ConvertToCommands() CommandList {

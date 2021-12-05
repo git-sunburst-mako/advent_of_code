@@ -24,6 +24,13 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/d003_binary_diagnostic/diagnostic.go"
+        },
+        {
+            "name": "Day 4",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/d004_giant_squid/giant_squid.go"
         }
     ]
 }
