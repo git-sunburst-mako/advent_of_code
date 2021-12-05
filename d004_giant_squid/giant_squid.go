@@ -97,7 +97,7 @@ type bingo_game struct {
 	boards        []*bingo_board
 }
 
-func (g *bingo_game) play() *bingo_board {
+func (g *bingo_game) play_to_win() *bingo_board {
 	for _, c := range g.calling_order {
 		for j, b := range g.boards {
 			b.mark_board(c)
@@ -112,13 +112,40 @@ func (g *bingo_game) play() *bingo_board {
 	return failure
 }
 
+func (g *bingo_game) play_to_lose() *bingo_board {
+	for _, c := range g.calling_order {
+		if len(g.boards) == 1 {
+			g.boards[0].last_number = c
+			fmt.Printf("WE HAVE A LOSER - LUCKY NUMBER: %d \n", 0)
+			return g.boards[0]
+		}
+
+		board_count := len(g.boards)
+		for b := 0; b < board_count; b++ {
+			g.boards[b].mark_board(c)
+			if g.boards[b].bingo {
+				g.throw_out_board(b)
+				board_count--
+				b--
+			}
+		}
+	}
+	var failure *bingo_board = new(bingo_board)
+	return failure
+}
+
+func (g *bingo_game) throw_out_board(i int) {
+	g.boards[i] = g.boards[len(g.boards)-1]
+	g.boards = g.boards[:len(g.boards)-1]
+}
+
 func main() {
 	var bingo *bingo_game = new(bingo_game)
-	var ir *utils.InputReader = utils.NewInputReader(INPUT_NUMBERS)
+	var ir *utils.InputReader = utils.NewInputReader(TEST_NUMBERS)
 	ir.SplitStringToInts(",")
 	bingo.calling_order = ir.IntData
 
-	var board_ir *utils.InputReader = utils.NewInputReader(INPUT_BOARDS)
+	var board_ir *utils.InputReader = utils.NewInputReader(TEST_BOARDS)
 	//board_count := (board_ir.InputCount + 1) / 6
 
 	for i := 0; i < board_ir.InputCount; i += 6 {
@@ -127,7 +154,10 @@ func main() {
 		bingo.boards = append(bingo.boards, board)
 	}
 
-	winner := bingo.play()
+	winner := bingo.play_to_win()
 	fmt.Printf("SOLUTION: %d \n", winner.solve())
+
+	loser := bingo.play_to_lose()
+	fmt.Printf("SOLUTION: %d \n", loser.solve())
 
 }
