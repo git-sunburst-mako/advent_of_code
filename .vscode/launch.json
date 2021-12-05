@@ -17,6 +17,13 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/d002_dive/dive.go"
+        }, 
+        {
+            "name": "Day 3",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/d003_binary_diagnostic/diagnostic.go"
         }
     ]
 }

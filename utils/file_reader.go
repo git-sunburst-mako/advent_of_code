@@ -7,26 +7,11 @@ import (
 	"strings"
 )
 
-type Command struct {
-	Direction string
-	Value     int
-}
-
-type CommandList struct {
-	Commands []Command
-}
-
-func NewCommand(input string) Command {
-	i := strings.Split(input, " ")
-	v, _ := strconv.Atoi(i[1])
-	c := Command{Direction: i[0], Value: v}
-	return c
-}
-
 type InputReader struct {
 	FilePath   string
 	StrData    []string
 	IntData    []int
+	BinData    [][]bool
 	InputCount int
 }
 
@@ -69,16 +54,21 @@ func (ir *InputReader) ConvertToCommands() CommandList {
 	return ret
 }
 
-// return sum of interger array
-func Sum_Array(arr []int) int {
-	var s int = 0
-	for _, i := range arr {
-		s += i
+func (ir *InputReader) ConvertToBinary() {
+	var data [][]bool
+	ir.ConvertToInts()
+	for _, i := range ir.StrData {
+		bits := strings.Split(i, "")
+		var datum []bool
+		for _, j := range bits {
+			b, _ := strconv.Atoi(j)
+			datum = append(datum, ItoB(b))
+		}
+		data = append(data, datum)
 	}
-	return s
+	ir.BinData = data
 }
 
-// return first > second (bool)
-func Arr_Sum_Greater(a, b []int) bool {
-	return Sum_Array(a) > Sum_Array(b)
+func (ir *InputReader) BinaryLength() int {
+	return len(ir.BinData[0])
 }
