@@ -68,3 +68,10 @@ func ArrStoI(s []string) []int {
 	}
 	return ints
 }
+
+func MinMaxI(a, b int) (int, int) {
+	if a < b {
+		return a, b
+	}
+	return b, a
+}
