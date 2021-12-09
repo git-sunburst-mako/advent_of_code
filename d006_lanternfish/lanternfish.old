@@ -1,0 +1,114 @@
+package nil
+
+/*
+A lanternfish that creates a new fish resets its timer to 6,
+not 7 (because 0 is included as a valid timer value). The new
+lanternfish starts with an internal timer of 8 and does not
+start counting down until the next day.
+*/
+
+const CHALLENGE string = "../input/lanternfish.input"
+const TEST string = "../input/lanternfish.test"
+const SINGLE string = "../input/lanternfish.single"
+
+const GESTATION_RATE int = 6
+const NEWBORN int = GESTATION_RATE + 2
+const DAYS int = 80
+
+var FISH_ID int = -1
+
+type lanternfish struct {
+	id        int
+	fertility int
+}
+
+func new_lanternfish() *lanternfish {
+	var f = new(lanternfish)
+	f.id = next_fish_id()
+	f.fertility = NEWBORN
+	return f
+}
+
+func next_fish_id() int {
+	FISH_ID++
+	return FISH_ID
+}
+
+func seed_lanterfish(pos int) *lanternfish {
+	var f = new(lanternfish)
+	f.id = next_fish_id()
+	f.fertility = GESTATION_RATE - pos
+	return f
+}
+
+func (f *lanternfish) is_fertile() bool {
+	if f.fertility > 0 {
+		f.fertility--
+		return false
+	} else {
+		f.fertility = GESTATION_RATE
+		return true
+	}
+}
+
+type population_tracker struct {
+	fishes [GESTATION_RATE][]*lanternfish
+	day    int
+}
+
+func (pt *population_tracker) seed(input []int) {
+	for _, f := range input {
+		pos := (f % GESTATION_RATE) - 1
+		pt.fishes[pos] = append(pt.fishes[pos], seed_lanterfish(pos))
+	}
+}
+
+func (pt *population_tracker) advance() {
+	new_fish_day := (pt.day + 2) % GESTATION_RATE
+
+	for i := 0; i < GESTATION_RATE; i++ {
+		for k := range pt.fishes[i] {
+			if pt.fishes[i][k].is_fertile() {
+				f := new_lanternfish()
+				pt.fishes[new_fish_day] = append(pt.fishes[new_fish_day], f)
+			}
+		}
+	}
+
+	pt.day++
+	pt.print_pop()
+}
+
+func (pt *population_tracker) print_pop() {
+	fmt.Printf("DAY: %d | THERE ARE: %d FISH \n", pt.day, pt.total_fish())
+}
+
+func status(day, fish, total int) {
+	fmt.Printf("DAY: %d | THERE ARE: %d NEW FISH ~ THERE ARE: %d TOTAL \n", day, fish, total)
+}
+
+func (pt *population_tracker) total_fish() int {
+	var sum int = 0
+
+	for i := 0; i < GESTATION_RATE; i++ {
+		sum += len(pt.fishes[i])
+	}
+	return sum
+}
+
+func main() {
+	var x *utils.InputReader = utils.NewInputReader(TEST)
+	x.SplitStringToInts(",")
+	x.ConvertToInts()
+
+	var pt population_tracker
+	pt.seed(x.IntData)
+	pt.day = 0
+	pt.print_pop()
+
+	for i := 0; i < DAYS; i++ {
+		pt.advance()
+	}
+	pt.print_pop()
+
+}

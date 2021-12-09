@@ -75,3 +75,5 @@ func MinMaxI(a, b int) (int, int) {
 	}
 	return b, a
 }
+
+func LessByVal(i, j int) bool { return i < j }

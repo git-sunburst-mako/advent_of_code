@@ -38,6 +38,20 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/d005_hydrothermal/hydrothermal.go"
+        },
+        {
+            "name": "Day 6",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/d006_lanternfish/lanternfish.go"
+        },
+        {
+            "name": "Day 7",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/d007_whales/whales.go"
         }
     ]
 }
