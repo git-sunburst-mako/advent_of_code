@@ -52,6 +52,13 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/d007_whales/whales.go"
+        },
+        {
+            "name": "Day 8",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/d008_segments/segments.go"
         }
     ]
 }

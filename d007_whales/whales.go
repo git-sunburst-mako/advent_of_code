@@ -46,6 +46,18 @@ func (c *crab_armada) calculate_min_fuel(convergence int) int {
 	return fuel
 }
 
+func (c *crab_armada) calculate_mean_fuel(convergence int) int {
+	var fuel int
+	for k, v := range c.positions {
+		dist := int(math.Sqrt(math.Pow(float64(k-convergence), 2)))
+		weighted_dist := dist * (dist + 1) / 2
+		mag := weighted_dist * v
+
+		fuel += mag
+	}
+	return fuel
+}
+
 func new_crab_aramada(crabs []int) *crab_armada {
 	c := new(crab_armada)
 	c.positions = make(map[int]int)
@@ -66,10 +78,12 @@ func main() {
 	x.SplitStringToInts(",")
 
 	armada := new_crab_aramada(x.IntData)
-	//mn := armada.mean(armada.positions, armada.count)
+	mn := armada.mean(armada.positions, armada.count)
 	med := armada.median(armada.ordered_list, armada.count)
 
-	//fuel_mn := armada.calculate_min_fuel(mn)
+	fuel_mn := armada.calculate_mean_fuel(mn)
+	fmt.Println(armada.fuel_required, fuel_mn)
+
 	fuel_med_min := armada.calculate_min_fuel(med + 2)
 	fuel_med := armada.calculate_min_fuel(med)
 	fuel_med_max := armada.calculate_min_fuel(med + 1)
